@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <LangVersion>latest</LangVersion>
+    <RootNamespace>OAuthority</RootNamespace>
+    <AssemblyName>OAuthority</AssemblyName>
+    <Version>0.1.0-alpha.1</Version>
+    <Authors>wdcossey</Authors>
+    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+    <Description>Cross-platform OAuth2/OIDC authentication library for .NET desktop apps</Description>
+    <PackageTags>oauth2;oidc;authentication;desktop;blazor;avalonia</PackageTags>
+    <RepositoryUrl>https://github.com/wdcossey/OAuthority</RepositoryUrl>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="$(AssemblyName).Tests" />
+  </ItemGroup>
+</Project>

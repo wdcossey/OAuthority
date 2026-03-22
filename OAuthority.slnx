@@ -1,0 +1,18 @@
+<Solution>
+  <Folder Name="/samples/">
+    <Project Path="samples/OAuthority.Sample.Console/OAuthority.Sample.Console.csproj" />
+    <Project Path="samples/OAuthority.Sample.Console.Google/OAuthority.Sample.Console.Google.csproj" />
+  </Folder>
+  <Folder Name="/src/">
+    <Project Path="src/OAuthority.Browser.Native/OAuthority.Browser.Native.csproj" />
+    <Project Path="src/OAuthority.Browser.Photino/OAuthority.Browser.Photino.csproj" />
+    <Project Path="src/OAuthority.Browser/OAuthority.Browser.csproj" />
+    <Project Path="src/OAuthority.Providers.GitHub/OAuthority.Providers.GitHub.csproj" />
+    <Project Path="src/OAuthority.Providers.Google/OAuthority.Providers.Google.csproj" />
+    <Project Path="src/OAuthority.Providers.Microsoft/OAuthority.Providers.Microsoft.csproj" />
+    <Project Path="src/OAuthority/OAuthority.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/OAuthority.Tests/OAuthority.Tests.csproj" />
+  </Folder>
+</Solution>

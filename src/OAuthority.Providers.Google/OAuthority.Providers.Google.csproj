@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <LangVersion>latest</LangVersion>
+    <RootNamespace>OAuthority.Providers</RootNamespace>
+    <Version>0.1.0-alpha.1</Version>
+    <Authors>wdcossey</Authors>
+    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+    <Description>Google OAuth2/OIDC provider for OAuthority</Description>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\OAuthority\OAuthority.csproj" />
+  </ItemGroup>
+</Project>

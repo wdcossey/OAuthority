@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <LangVersion>latest</LangVersion>
+    <RootNamespace>OAuthority.Browser.Photino</RootNamespace>
+    <Version>0.1.0-alpha.1</Version>
+    <Authors>wdcossey</Authors>
+    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+    <Description>Photino-based embedded browser handler for OAuthority</Description>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\OAuthority\OAuthority.csproj" />
+    <ProjectReference Include="..\OAuthority.Browser\OAuthority.Browser.csproj" />
+    <PackageReference Include="Photino.NET" Version="*" />
+  </ItemGroup>
+</Project>

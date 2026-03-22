@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net9.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <LangVersion>latest</LangVersion>
+    <RootNamespace>OAuthority.Sample.Console</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\OAuthority\OAuthority.csproj" />
+    <ProjectReference Include="..\..\src\OAuthority.Browser\OAuthority.Browser.csproj" />
+    <ProjectReference Include="..\..\src\OAuthority.Providers.GitHub\OAuthority.Providers.GitHub.csproj" />
+  </ItemGroup>
+</Project>

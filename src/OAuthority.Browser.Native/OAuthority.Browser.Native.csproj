@@ -1,0 +1,36 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <LangVersion>latest</LangVersion>
+    <RootNamespace>OAuthority.Browser.Native</RootNamespace>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Version>0.1.0-alpha.1</Version>
+    <Authors>wdcossey</Authors>
+    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+    <Description>Native WebKit/WebView2 embedded browser handler for OAuthority</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\OAuthority\OAuthority.csproj" />
+    <ProjectReference Include="..\OAuthority.Browser\OAuthority.Browser.csproj" />
+  </ItemGroup>
+
+  <!-- Native library references — built from src/OAuthority.Browser.Native/Linux|Windows|macOS -->
+  <ItemGroup Condition="$([MSBuild]::IsOSPlatform('Linux'))">
+    <None Include="runtimes/linux-x64/native/OAuthority.Native.so"
+          CopyToOutputDirectory="PreserveNewest"
+          Condition="Exists('runtimes/linux-x64/native/OAuthority.Native.so')" />
+  </ItemGroup>
+  <ItemGroup Condition="$([MSBuild]::IsOSPlatform('Windows'))">
+    <None Include="runtimes/win-x64/native/OAuthority.Native.dll"
+          CopyToOutputDirectory="PreserveNewest"
+          Condition="Exists('runtimes/win-x64/native/OAuthority.Native.dll')" />
+  </ItemGroup>
+  <ItemGroup Condition="$([MSBuild]::IsOSPlatform('OSX'))">
+    <None Include="runtimes/osx/native/OAuthority.Native.dylib"
+          CopyToOutputDirectory="PreserveNewest"
+          Condition="Exists('runtimes/osx/native/OAuthority.Native.dylib')" />
+  </ItemGroup>
+</Project>
