@@ -10,6 +10,7 @@
     <Project Path="src/OAuthority.Providers.GitHub/OAuthority.Providers.GitHub.csproj" />
     <Project Path="src/OAuthority.Providers.Google/OAuthority.Providers.Google.csproj" />
     <Project Path="src/OAuthority.Providers.Microsoft/OAuthority.Providers.Microsoft.csproj" />
+    <Project Path="src/OAuthority.Providers/OAuthority.Providers.csproj" />
     <Project Path="src/OAuthority/OAuthority.csproj" />
   </Folder>
   <Folder Name="/tests/">
