@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <LangVersion>latest</LangVersion>
+    <RootNamespace>OAuthority.Providers</RootNamespace>
+    <Version>0.1.0-alpha.1</Version>
+    <Authors>wdcossey</Authors>
+    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+    <Description>Built-in OAuth2/OIDC providers and factory for OAuthority</Description>
+    <PackageTags>oauth2;oidc;authentication;desktop;providers</PackageTags>
+    <RepositoryUrl>https://github.com/wdcossey/OAuthority</RepositoryUrl>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\OAuthority\OAuthority.csproj" />
+  </ItemGroup>
+</Project>
