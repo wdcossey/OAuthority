@@ -36,7 +36,10 @@ public class SystemBrowserHandler : IBrowserHandler
 
         // Acknowledge to the browser
         var response = context.Response;
-        var html = "<html><body><h2>Authentication complete. You may close this window.</h2></body></html>"u8.ToArray();
+        var html =
+            """
+            <html><body style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100vh;margin:0;font-family:sans-serif;"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2NCIgaGVpZ2h0PSI2NCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiMyMmM1NWUiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cGF0aCBkPSJNMjIgMTEuMDhWMTJhMTAgMTAgMCAxIDEtNS45My05LjE0Ii8+PHBvbHlsaW5lIHBvaW50cz0iMjIgNCAxMiAxNC4wMSA5IDExLjAxIi8+PC9zdmc+" alt="Success" style="margin-bottom:20px;"><h2>Authentication complete. You may close this window.</h2></body></html>
+            """u8.ToArray();
         response.ContentLength64 = html.Length;
         response.ContentType = "text/html";
         await response.OutputStream.WriteAsync(html, cancellationToken);
