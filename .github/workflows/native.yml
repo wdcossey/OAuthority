@@ -1,0 +1,140 @@
+name: Build Native Libraries
+
+on:
+  push:
+    branches: [main, master, "claude/**"]
+    paths:
+      - "src/OAuthority.Browser.Native/**"
+      - ".github/workflows/native.yml"
+  pull_request:
+    paths:
+      - "src/OAuthority.Browser.Native/**"
+      - ".github/workflows/native.yml"
+  workflow_dispatch:
+
+jobs:
+  # ─── Linux x64 ────────────────────────────────────────────────────────────
+  linux-x64:
+    name: Linux (x64)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: sudo apt-get update && sudo apt-get install -y libgtk-3-dev libwebkit2gtk-4.1-dev
+
+      - name: Build
+        working-directory: src/OAuthority.Browser.Native/Linux
+        run: make
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: native-linux-x64
+          path: src/OAuthority.Browser.Native/runtimes/linux-x64/native/
+
+  # ─── Linux arm64 ──────────────────────────────────────────────────────────
+  linux-arm64:
+    name: Linux (arm64)
+    runs-on: ubuntu-24.04-arm
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: sudo apt-get update && sudo apt-get install -y libgtk-3-dev libwebkit2gtk-4.1-dev
+
+      - name: Build
+        working-directory: src/OAuthority.Browser.Native/Linux
+        run: make
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: native-linux-arm64
+          path: src/OAuthority.Browser.Native/runtimes/linux-arm64/native/
+
+  # ─── Windows x86 ──────────────────────────────────────────────────────────
+  windows-x86:
+    name: Windows (x86)
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configure (x86)
+        run: cmake -B build/win-x86 -A Win32 src/OAuthority.Browser.Native/Windows
+
+      - name: Build (x86)
+        run: cmake --build build/win-x86 --config Release
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: native-win-x86
+          path: src/OAuthority.Browser.Native/runtimes/win-x86/native/
+
+  # ─── Windows x64 ──────────────────────────────────────────────────────────
+  windows-x64:
+    name: Windows (x64)
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configure (x64)
+        run: cmake -B build/win-x64 -A x64 src/OAuthority.Browser.Native/Windows
+
+      - name: Build (x64)
+        run: cmake --build build/win-x64 --config Release
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: native-win-x64
+          path: src/OAuthority.Browser.Native/runtimes/win-x64/native/
+
+  # ─── Windows arm64 ────────────────────────────────────────────────────────
+  windows-arm64:
+    name: Windows (arm64)
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configure (arm64)
+        run: cmake -B build/win-arm64 -A ARM64 src/OAuthority.Browser.Native/Windows
+
+      - name: Build (arm64)
+        run: cmake --build build/win-arm64 --config Release
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: native-win-arm64
+          path: src/OAuthority.Browser.Native/runtimes/win-arm64/native/
+
+  # ─── macOS universal ──────────────────────────────────────────────────────
+  macos:
+    name: macOS (x64 + arm64 universal)
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build universal dylib
+        working-directory: src/OAuthority.Browser.Native/macOS
+        run: make universal
+
+      - name: Upload artifact (osx-x64)
+        uses: actions/upload-artifact@v4
+        with:
+          name: native-osx-x64
+          path: src/OAuthority.Browser.Native/runtimes/osx-x64/native/
+
+      - name: Upload artifact (osx-arm64)
+        uses: actions/upload-artifact@v4
+        with:
+          name: native-osx-arm64
+          path: src/OAuthority.Browser.Native/runtimes/osx-arm64/native/
+
+      - name: Upload artifact (osx universal)
+        uses: actions/upload-artifact@v4
+        with:
+          name: native-osx-universal
+          path: src/OAuthority.Browser.Native/runtimes/osx/native/
