@@ -1,5 +1,5 @@
 using OAuthority;
-using PhotinoNET;
+using Photino.NET;
 
 namespace OAuthority.Browser.Photino;
 
@@ -10,13 +10,13 @@ namespace OAuthority.Browser.Photino;
 ///   - Sets a valid WebKit user agent (fixes Monaco and other UA-sniffing JS libraries on Linux)
 ///   - Intercepts redirect URI via NavigationStarting without requiring a local HTTP server
 /// </summary>
-public class PhinoBrowserHandler : IBrowserHandler
+public class PhotinoBrowserHandler : IBrowserHandler
 {
-    private readonly PhinoBrowserOptions _options;
+    private readonly PhotinoBrowserOptions _options;
 
-    public PhinoBrowserHandler(PhinoBrowserOptions? options = null)
+    public PhotinoBrowserHandler(PhotinoBrowserOptions? options = null)
     {
-        _options = options ?? new PhinoBrowserOptions();
+        _options = options ?? new PhotinoBrowserOptions();
     }
 
     public Task<string> InvokeAsync(
@@ -45,14 +45,14 @@ public class PhinoBrowserHandler : IBrowserHandler
 
                 window.RegisterWebMessageReceivedHandler((sender, message) => { });
 
-                window.NavigationStarting += (sender, url) =>
+                /*window.NavigationStarting += (sender, url) =>
                 {
                     if (url != null && url.StartsWith(redirectUri, StringComparison.OrdinalIgnoreCase))
                     {
                         tcs.TrySetResult(url);
                         ((PhotinoWindow)sender!).Close();
                     }
-                };
+                };*/
 
                 window.Load(authorizationUrl);
                 window.WaitForClose();
@@ -63,7 +63,11 @@ public class PhinoBrowserHandler : IBrowserHandler
             }
         });
 
-        thread.SetApartmentState(ApartmentState.STA);
+        // STA is only needed (and supported) on Windows for COM interop
+        if (OperatingSystem.IsWindows())
+        {
+            thread.SetApartmentState(ApartmentState.STA);
+        }
         thread.IsBackground = true;
         thread.Start();
 
@@ -71,7 +75,7 @@ public class PhinoBrowserHandler : IBrowserHandler
     }
 }
 
-public record PhinoBrowserOptions
+public record PhotinoBrowserOptions
 {
     public string Title { get; init; } = "Sign In";
     public int Width { get; init; } = 800;
