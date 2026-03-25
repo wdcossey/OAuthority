@@ -12,6 +12,8 @@ namespace OAuthority.Browser.Native;
 /// </summary>
 public class NativeBrowserHandler : IBrowserHandler
 {
+    private const string NativeLib = "OAuthority.Native";
+
     private readonly NativeBrowserOptions _options;
 
     public NativeBrowserHandler(NativeBrowserOptions? options = null)
@@ -19,29 +21,76 @@ public class NativeBrowserHandler : IBrowserHandler
         _options = options ?? new NativeBrowserOptions();
     }
 
+    // Returns a heap-allocated string; caller must free via OAuthority_Free.
+    // Using IntPtr to control lifetime and avoid automatic marshaling.
+    [DllImport(NativeLib, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
+    private static extern IntPtr OAuthority_Browse(
+        string title,
+        string authUrl,
+        string redirectUri,
+        int width,
+        int height);
+
+    [DllImport(NativeLib, CallingConvention = CallingConvention.Cdecl)]
+    private static extern void OAuthority_Free(IntPtr ptr);
+
     public Task<string> InvokeAsync(
         string authorizationUrl,
         string redirectUri,
         CancellationToken cancellationToken = default)
     {
         var tcs = new TaskCompletionSource<string>();
-
         cancellationToken.Register(() => tcs.TrySetCanceled());
 
-        // TODO: P/Invoke into OAuthority.Native
-        // The native library will:
-        //   1. Create a GTK/Win32/Cocoa window with an embedded WebView
-        //   2. Navigate to authorizationUrl
-        //   3. Monitor navigations for a URL starting with redirectUri
-        //   4. Close the window and return the full redirect URL
-        //
-        // See: src/OAuthority.Browser.Native/Linux/OAuthority.Linux.cpp
-        //      src/OAuthority.Browser.Native/Windows/OAuthority.Windows.cpp
-        //      src/OAuthority.Browser.Native/macOS/OAuthority.Mac.mm
+        var thread = new Thread(() =>
+        {
+            try
+            {
+                var resultPtr = OAuthority_Browse(
+                    _options.Title,
+                    authorizationUrl,
+                    redirectUri,
+                    _options.Width,
+                    _options.Height);
 
-        throw new NotImplementedException(
-            "Native browser handler not yet implemented. " +
-            "Build the native library from src/OAuthority.Browser.Native first.");
+                if (resultPtr == IntPtr.Zero)
+                {
+                    tcs.TrySetException(new OAuthException("Native browser was closed without completing authentication."));
+                    return;
+                }
+
+                try
+                {
+                    var result = Marshal.PtrToStringAnsi(resultPtr)
+                        ?? throw new OAuthException("Native browser returned an empty redirect URL.");
+                    tcs.TrySetResult(result);
+                }
+                finally
+                {
+                    OAuthority_Free(resultPtr);
+                }
+            }
+            catch (DllNotFoundException ex)
+            {
+                tcs.TrySetException(new InvalidOperationException(
+                    $"Native browser library '{NativeLib}' not found. " +
+                    "Build the native library from src/OAuthority.Browser.Native/Linux|Windows|macOS first.", ex));
+            }
+            catch (Exception ex)
+            {
+                tcs.TrySetException(ex);
+            }
+        });
+
+        // GTK requires its event loop on a dedicated thread.
+        // STA is only needed (and supported) on Windows for COM/WebView2 interop.
+        if (OperatingSystem.IsWindows())
+            thread.SetApartmentState(ApartmentState.STA);
+
+        thread.IsBackground = true;
+        thread.Start();
+
+        return tcs.Task;
     }
 }
 

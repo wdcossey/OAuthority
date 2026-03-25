@@ -42,12 +42,13 @@ public record OAuthResult
     public string? TokenType { get; init; }
     public DateTimeOffset? ExpiresAt { get; init; }
     public IReadOnlyList<string> Scopes { get; init; } = [];
+    public Provider Provider { get; init; }
 
     public bool IsExpired => ExpiresAt.HasValue && ExpiresAt.Value <= DateTimeOffset.UtcNow;
 }
 
 /// <summary>
-/// Exception thrown when an OAuth2 authentication flow fails.
+/// Thrown when an OAuth2/OIDC flow fails.
 /// </summary>
 public class OAuthException(string message, string? error = null, string? errorDescription = null)
     : Exception(message)

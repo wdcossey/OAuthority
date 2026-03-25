@@ -14,16 +14,25 @@ public interface IOAuthProvider
 }
 
 /// <summary>
-/// Abstracts the browser used to show the authorization flow.
+/// Abstraction for the browser used to show the authorization flow.
+/// Implement this to provide a custom browser experience.
 /// </summary>
 public interface IBrowserHandler
 {
     /// <summary>
-    /// Opens the authorization URL and waits for the redirect URI to be intercepted.
-    /// Returns the full redirect URI including query string / fragment.
+    /// Opens the authorization URL and waits until a navigation matching
+    /// <paramref name="redirectUri"/> is detected.
     /// </summary>
-    Task<string> InvokeAsync(string authorizationUrl, string redirectUri, CancellationToken cancellationToken = default);
+    /// <param name="authorizationUrl">The full authorization URL to open.</param>
+    /// <param name="redirectUri">The redirect URI prefix to intercept.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>The full redirect URL including query string (contains the auth code).</returns>
+    Task<string> InvokeAsync(
+        string authorizationUrl,
+        string redirectUri,
+        CancellationToken cancellationToken = default);
 }
+
 
 /// <summary>
 /// Main entry point for OAuthority authentication flows.

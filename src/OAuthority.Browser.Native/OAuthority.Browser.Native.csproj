@@ -19,18 +19,18 @@
 
   <!-- Native library references — built from src/OAuthority.Browser.Native/Linux|Windows|macOS -->
   <ItemGroup Condition="$([MSBuild]::IsOSPlatform('Linux'))">
-    <None Include="runtimes/linux-x64/native/OAuthority.Native.so"
+    <None Include="../runtimes/linux-x64/native/OAuthority.Native.so"
           CopyToOutputDirectory="PreserveNewest"
-          Condition="Exists('runtimes/linux-x64/native/OAuthority.Native.so')" />
+          Condition="Exists('../runtimes/linux-x64/native/OAuthority.Native.so')" />
   </ItemGroup>
   <ItemGroup Condition="$([MSBuild]::IsOSPlatform('Windows'))">
-    <None Include="runtimes/win-x64/native/OAuthority.Native.dll"
+    <None Include="../runtimes/win-x64/native/OAuthority.Native.dll"
           CopyToOutputDirectory="PreserveNewest"
-          Condition="Exists('runtimes/win-x64/native/OAuthority.Native.dll')" />
+          Condition="Exists('../runtimes/win-x64/native/OAuthority.Native.dll')" />
   </ItemGroup>
   <ItemGroup Condition="$([MSBuild]::IsOSPlatform('OSX'))">
-    <None Include="runtimes/osx/native/OAuthority.Native.dylib"
+    <None Include="../runtimes/osx/native/OAuthority.Native.dylib"
           CopyToOutputDirectory="PreserveNewest"
-          Condition="Exists('runtimes/osx/native/OAuthority.Native.dylib')" />
+          Condition="Exists('../runtimes/osx/native/OAuthority.Native.dylib')" />
   </ItemGroup>
 </Project>
