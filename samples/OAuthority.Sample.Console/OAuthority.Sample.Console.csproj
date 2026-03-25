@@ -9,6 +9,9 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\src\OAuthority.Browser.Native\OAuthority.Browser.Native.csproj" />
+    <ProjectReference Include="..\..\src\OAuthority.Browser.Photino\OAuthority.Browser.Photino.csproj" />
+    <ProjectReference Include="..\..\src\OAuthority.Providers\OAuthority.Providers.csproj" />
     <ProjectReference Include="..\..\src\OAuthority\OAuthority.csproj" />
     <ProjectReference Include="..\..\src\OAuthority.Browser\OAuthority.Browser.csproj" />
     <ProjectReference Include="..\..\src\OAuthority.Providers.GitHub\OAuthority.Providers.GitHub.csproj" />

@@ -6,7 +6,10 @@ using OAuthority.Providers;
 var clientId     = Environment.GetEnvironmentVariable("GITHUB_CLIENT_ID")     ?? args.ElementAtOrDefault(0);
 var clientSecret = Environment.GetEnvironmentVariable("GITHUB_CLIENT_SECRET") ?? args.ElementAtOrDefault(1);
 
-if (string.IsNullOrWhiteSpace(clientId))
+var googleClientId     = Environment.GetEnvironmentVariable("GOOGLE_CLIENT_ID")     ?? args.ElementAtOrDefault(0);
+var googleClientSecret = Environment.GetEnvironmentVariable("GOOGLE_CLIENT_SECRET") ?? args.ElementAtOrDefault(1);
+
+if (string.IsNullOrWhiteSpace(clientId) )
 {
     Console.Error.WriteLine("GitHub Client ID is required.");
     Console.Error.WriteLine("  Set GITHUB_CLIENT_ID env var, or pass as first argument.");
@@ -15,16 +18,32 @@ if (string.IsNullOrWhiteSpace(clientId))
 
 const int port = 5001;
 
-var provider = new GitHubOAuthProvider(new GitHubOAuthOptions
+/*var provider = new GitHubOAuthProvider(new GitHubOAuthOptions
 {
     ClientId     = clientId,
     ClientSecret = clientSecret,
     LocalPort    = port,
     Scopes       = ["read:user", "user:email"],
+});*/
+
+var browser = new SystemBrowserHandler(port); //new NativeBrowserHandler(new NativeBrowserOptions() { });//
+
+var googleProvider = await OAuthProviderFactory.CreateAsync(Provider.Google, new ProviderConfig()
+{
+    ClientId     = googleClientId,
+    ClientSecret = googleClientSecret,
+    RedirectUri  = $"http://localhost:{port}/callback",
+    Scopes       = ["openid", "email", "profile"],
 });
 
-var browser = new SystemBrowserHandler(port);
-var client  = new OAuthorityClient(provider, browser);
+var provider = await OAuthProviderFactory.CreateAsync(Provider.Google, new ProviderConfig()
+{
+    ClientId = clientId,
+    ClientSecret = clientSecret,
+    RedirectUri = $"http://localhost:{port}/callback",
+});
+
+var client  = new OAuthorityClient(googleProvider, browser);
 
 Console.WriteLine("Opening browser for GitHub authentication...");
 Console.WriteLine($"Listening for redirect on http://localhost:{port}/");
@@ -32,7 +51,8 @@ Console.WriteLine();
 
 try
 {
-    var result = await client.AuthenticateAsync();
+    var tokenSource = new CancellationTokenSource(TimeSpan.FromSeconds(60));
+    var result = await client.AuthenticateAsync(tokenSource.Token);
 
     Console.WriteLine("Authentication successful!");
     Console.WriteLine($"  Token type:    {result.TokenType}");
